@@ -121,11 +121,12 @@ def resize_larger_edge(
 
         factor = image.shape[largest_side_index] / MAX_DIMENSION
         new_dimensions = [0, 0]
-        new_dimensions[np.mod(largest_side_index + 1, 2)] = (
-            image.shape[np.mod(largest_size_index + 1, 2)] / factor
+        new_dimensions[np.mod(largest_side_index + 1, 2)] = int(
+            image.shape[np.mod(largest_side_index + 1, 2)] / factor
         )
         new_dimensions[largest_side_index] = MAX_DIMENSION
 
+        print("Resizing to ({}, {})".format(new_dimensions[1], new_dimensions[0]))
         image = cv2.resize(image, (new_dimensions[1], new_dimensions[0]))
         height, width, _ = image.shape
 
@@ -258,6 +259,9 @@ if __name__ == "__main__":
     net = caffe.Net(_A.prototxt, caffe.TEST, weights=_A.caffemodel)
 
     for index, (image_id, image_file) in enumerate(tqdm(image_ids)):
+        if image_id not in force_boxes_map:
+            print("{} is missing".format(image_id))
+            continue
 
         if _A.force_boxes is not None:
             # Get force_boxes if provided through args.
