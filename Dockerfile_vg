@@ -1,8 +1,8 @@
-FROM nvidia/cuda:8.0-cudnn7-devel-ubuntu16.04
+FROM nvidia/cuda:9.2-cudnn7-devel-ubuntu16.04
 
 ARG python=3.5
 ENV PYTHON_VERSION=${python}
-ENV NCCL_VERSION=2.3.5-2+cuda8.0
+ENV NCCL_VERSION=2.4.8-1+cuda9.2
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
   build-essential \
@@ -76,7 +76,8 @@ RUN pip install --trusted-host pypi.python.org \
   cld2-cffi \
   jupyterlab \
   easydict \
-  opencv-python
+  opencv-python \
+  scikit-image
 
 COPY . /workspace
 WORKDIR /workspace/lib
